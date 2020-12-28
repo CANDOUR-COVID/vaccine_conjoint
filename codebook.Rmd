@@ -1,0 +1,272 @@
+---
+title: "Codebook for CANDOUR Conjoint Analysis"
+author: "Raymond Duch et al"
+date: "19/12/2020"
+output: 
+  pdf_document: 
+    keep_tex: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+library(tidyverse)
+
+global_data <- readRDS("data/nbh_clean_conjoint_global.rds")
+
+sum_char <- function(char_var, var_name) {
+  
+  out <- data.frame(`Obs.` = sum(!is.na(char_var)),
+             Unique = length(unique(char_var)),
+             Missing = sum(is.na(char_var))) %>% 
+    t(.)
+  
+  colnames(out)[1] <- var_name
+  
+  return(out)  
+}
+
+unique_vals <- function(char_var) {
+  
+  unq <- unique(char_var)
+  
+  if (length(unq) > 5) {
+    out <- paste(c(unq[1:5],"..."), collapse = ", ")
+  }
+  return(out)
+}
+
+sum_factor <- function(char_var) {
+  
+  unq <- c(unique(char_var))[!is.na(unique(char_var))]
+  counts <- c(sapply(unq, function (x) sum(char_var == x, na.rm = TRUE)), sum(is.na(char_var)))
+  unq <- c(unq, "Missing")
+  
+  out <- data.frame(Value = unq,
+                    `Obs.` = counts,
+                    row.names = NULL)
+  
+  return(out)
+}
+
+sum_num <- function(num_var, var_name) {
+  
+  out <- data.frame(`Obs.` = round(length(num_var)),
+             Mean = round(mean(num_var, na.rm= TRUE),1),
+             `Std Dev.` = round(sd(num_var, na.rm= TRUE),1),
+             `Min.` = round(min(num_var, na.rm = TRUE),1),
+             `Max.` = round(max(num_var, na.rm = TRUE),1),
+             `Missing` = round(sum(is.na(num_var)))) %>% 
+    mutate_all(as.character) %>% 
+    t(.)
+    
+  colnames(out)[1] <- var_name
+  
+  return(out)
+}
+
+sum_att <- function(char_var) {
+  
+  unq <- levels(char_var)
+  counts <- c(sapply(unq, function (x) sum(char_var == x, na.rm = TRUE)), sum(is.na(char_var)))
+  unq <- c(unq, "Missing")
+  
+  unq <- ifelse(unq == levels(char_var)[1], paste0("*",unq),unq)
+  
+  out <- data.frame(Value = unq,
+                    `Obs.` = counts,
+                    row.names = NULL)
+  
+  return(out)
+}
+
+
+
+```
+
+All data used for the conjoint analysis and variables is stored within the `data/nbh_clean_global.*` files. We provide a raw `.CSV` version and a formatted `.Rds` file which contains the same data but with factor-variable formatting pre-applied to the conjoint attribute variables.
+
+Each row of the dataset is a hypothetical vaccine recipient, or "profile". Two profiles comprise a single conjoint "round", and forms the basis of the dichotomous choice the respondent makes between potential recipients. Each respondent is presented with 8 rounds of of the conjoint experiment, and therefore makes 8 choices.
+
+## Respondent Characteristics
+
+**id** -- *Character variable* -- Distinguishes individual respondents in the dataset, and takes the form of `[country]_` and a unique number corresponding to each respondent within that country.
+
+``` {r, include = TRUE}
+knitr::kable(sum_char(global_data$id, "id"))
+```
+E.g.,
+``` {r, include = TRUE}
+unique_vals(global_data$id)
+```
+
+**country** -- Country location of respondent. 
+
+``` {r id, include = TRUE}
+full_tab <- sum_factor(global_data$country)
+
+missing_tab <- full_tab[full_tab$Value == "Missing",]
+
+country_tab <- full_tab[!(full_tab$Value == "Missing"),]
+
+knitr::kable(rbind(country_tab[order(country_tab$Value),],missing_tab), row.names = FALSE)
+
+
+```
+
+\newpage
+
+**age** -- Age of respondent.
+
+``` {r, include = TRUE}
+knitr::kable(sum_num(global_data$age, "age"))
+```
+
+
+**gender** -- Gender of respondent.
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$gender))
+```
+
+
+**ideology** -- Ideological self-placement of respondent on an 11-point scale from 0 (Left) to 10 (Right). Note, this question was not asked in China. 
+
+``` {r, include = TRUE}
+knitr::kable(sum_num(global_data$ideology, "ideology"))
+```
+
+
+**ind_inc** -- Dichotomous classification of respondents' income level. `High` and `Low` values are relative to the median estimated income for each country.
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$ind_inc))
+```
+
+
+
+\newpage
+
+**education** -- Trichotomous classification of respondents' level of education, relative to the educational levels within each country.
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$education))
+```
+
+
+**hes_covid_2** -- Five-point Likert scale from `Strongly agree` to `Strongly disagree`, asking respondents' opinions on the following statement: "I am concerned about serious side effects of the COVID-19 vaccine".
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$hes_covid_2))
+```
+
+
+**wtp_access** -- Response to the following prompt:
+
+"Talking about vaccines in general, in some countries vaccines are only available from the government either at low or no cost. In some countries vaccines are only available for private purchase. And in some countries vaccines are available from the government but citizens can pay privately to gain early access.
+
+Which of these three approaches do you think should be applied to the COVID-19 vaccine? Would you prefer
+
+* Vaccines only made available by government at low or no cost?
+* Vaccines are only available for private purchase?
+* Vaccines made available by government but citizens can pay privately to gain access?"
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$wtp_access))
+```
+
+
+\newpage
+**wtp_private** -- Response to the following prompt:
+
+"Consider the following situation: a COVID-19 vaccine becomes available and is provided by government health agencies. For 80 out of 100 people the vaccine would provide protection for at least 18 months. But there are limited initial supplies of the vaccine. For this reason, you would have to wait 6 months before you could receive it. If a COVID-19 vaccine was also available for private purchase and you could receive it immediately would you considering buying it?"
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$wtp_private))
+```
+
+
+**int_pol_implem_6** -- 0-100 scale, asking respondent's how much they agree with the following statement: "The government should make the COVID-19 vaccine mandatory for everybody"
+
+``` {r, include = TRUE}
+knitr::kable(sum_num(global_data$int_pol_implem_6,"int_pol_implem_6"))
+```
+
+\newpage
+## Conjoint Variables
+
+### Meta-data
+
+**person** - distinguishes rounds of the conjoint experiment, and takes the form of `person[i]` where `i` corresponds to the ith comparison between two hypothetical profiles. Each respondent was presented with 8 rounds of the conjoint.
+
+``` {r, include = TRUE}
+knitr::kable(sum_char(global_data$person, "person"))
+```
+
+
+
+**candidate** -- distinguishes the two candidate profiles within each round of the conjoint experiment ("A" or "B").
+
+``` {r, include = TRUE}
+knitr::kable(sum_char(global_data$candidate, "candidate"))
+```
+
+
+
+**ans** -- indicates which candidate ("A" or "B") the respondent chose in the round of the experiment corresponding to this observation.
+
+``` {r, include = TRUE}
+knitr::kable(sum_char(global_data$ans, "ans"))
+```
+
+
+
+**select** -- binary indicator of whether each profile (the unit of observation) was chosen (1) or not (0).
+
+``` {r, include = TRUE}
+knitr::kable(sum_factor(global_data$select))
+```
+
+\newpage
+### Attributes
+
+*Note: reference levels for each attribute are indicated with an asterisk.*
+
+
+
+**vulnerability** -- Risk of COVID-19 related death.
+
+``` {r, include = TRUE}
+knitr::kable(sum_att(global_data$vulnerability))
+```
+
+
+
+**transmission** -- Risk of catching and transmitting the COVID-19 virus.
+
+``` {r, include = TRUE}
+knitr::kable(sum_att(global_data$transmission))
+```
+
+
+**income** -- Income level.
+
+``` {r, include = TRUE}
+knitr::kable(sum_att(global_data$income))
+```
+
+
+**occupation** -- Occupation status.
+
+``` {r, include = TRUE}
+knitr::kable(sum_att(global_data$occupation))
+```
+
+
+\newpage
+**age_category** -- Age category.
+
+``` {r, include = TRUE}
+knitr::kable(sum_att(global_data$age_category))
+```
+

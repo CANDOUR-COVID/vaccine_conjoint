@@ -1,0 +1,64 @@
+
+\begin{table}
+\begin{center}
+\begin{scriptsize}
+\begin{tabular}{l c c c}
+\hline
+ & \multicolumn{3}{c}{Gender} \\
+\cline{2-4}
+ & Female & Male & Other \\
+\hline
+(Intercept)                                     & $-1.53^{***}$ & $-1.31^{***}$ & $-3.29^{***}$ \\
+                                                & $(0.13)$      & $(0.09)$      & $(0.76)$      \\
+Vulnerability                                   &               &               &               \\
+                                                &               &               &               \\
+\quad Moderate (risk of death)                  & $0.26^{***}$  & $0.21^{***}$  & $0.94^{*}$    \\
+                                                & $(0.03)$      & $(0.03)$      & $(0.46)$      \\
+\quad High (risk of death)                      & $0.90^{***}$  & $0.79^{***}$  & $1.41^{***}$  \\
+                                                & $(0.06)$      & $(0.06)$      & $(0.28)$      \\
+Transmission                                    &               &               &               \\
+                                                &               &               &               \\
+\quad Moderate risk (of transmission)           & $0.23^{***}$  & $0.18^{***}$  & $0.06$        \\
+                                                & $(0.03)$      & $(0.02)$      & $(0.21)$      \\
+\quad High risk (of transmission)               & $0.80^{***}$  & $0.66^{***}$  & $1.05^{**}$   \\
+                                                & $(0.06)$      & $(0.05)$      & $(0.38)$      \\
+Income                                          &               &               &               \\
+                                                &               &               &               \\
+\quad Average income level                      & $-0.10^{***}$ & $-0.06^{**}$  & $-0.37$       \\
+                                                & $(0.02)$      & $(0.02)$      & $(0.28)$      \\
+\quad Highest 20\% income level                 & $-0.25^{***}$ & $-0.18^{***}$ & $-0.73^{*}$   \\
+                                                & $(0.05)$      & $(0.04)$      & $(0.29)$      \\
+Occupation                                      &               &               &               \\
+                                                &               &               &               \\
+\quad Non-Key worker: Can work at home          & $-0.00$       & $-0.04$       & $0.76$        \\
+                                                & $(0.05)$      & $(0.04)$      & $(0.44)$      \\
+\quad Non-Key worker: Cannot work at home       & $0.45^{***}$  & $0.29^{***}$  & $1.47$        \\
+                                                & $(0.06)$      & $(0.04)$      & $(0.85)$      \\
+\quad Key worker: Education and childcare       & $1.00^{***}$  & $0.81^{***}$  & $3.01^{***}$  \\
+                                                & $(0.07)$      & $(0.07)$      & $(0.66)$      \\
+\quad Key worker: Factory worker                & $0.69^{***}$  & $0.54^{***}$  & $2.66^{***}$  \\
+                                                & $(0.06)$      & $(0.04)$      & $(0.57)$      \\
+\quad Key worker: Water and electricity service & $0.75^{***}$  & $0.62^{***}$  & $2.39^{***}$  \\
+                                                & $(0.06)$      & $(0.06)$      & $(0.62)$      \\
+\quad Key worker: Police and fire-fighting      & $1.03^{***}$  & $0.84^{***}$  & $1.48^{***}$  \\
+                                                & $(0.08)$      & $(0.08)$      & $(0.36)$      \\
+\quad Key worker: Health and social care        & $1.30^{***}$  & $1.03^{***}$  & $2.80^{***}$  \\
+                                                & $(0.09)$      & $(0.07)$      & $(0.69)$      \\
+Age Category                                    &               &               &               \\
+                                                &               &               &               \\
+\quad 40 years old                              & $0.23^{***}$  & $0.24^{***}$  & $-0.26$       \\
+                                                & $(0.02)$      & $(0.04)$      & $(0.32)$      \\
+\quad 65 years old                              & $0.41^{***}$  & $0.43^{***}$  & $0.23$        \\
+                                                & $(0.06)$      & $(0.08)$      & $(0.45)$      \\
+\quad 79 years old                              & $0.42^{***}$  & $0.38^{***}$  & $0.29$        \\
+                                                & $(0.08)$      & $(0.10)$      & $(0.40)$      \\
+\hline
+Country Fixed Effects?                          & Yes           & Yes           & Yes           \\
+\hline
+\multicolumn{4}{l}{\tiny{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}
+\end{tabular}
+\end{scriptsize}
+\caption{Logistic Regression Results for Gender Categories. The dependent variable is the Forced Choice decision. These are the estimates used to construct the conjoint plots presented in Figure \ref{fig:hetero_logit_cov_edu_gen}.}
+\label{table:gender_logit}
+\end{center}
+\end{table}

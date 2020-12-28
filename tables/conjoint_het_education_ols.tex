@@ -1,0 +1,64 @@
+
+\begin{table}
+\begin{center}
+\begin{scriptsize}
+\begin{tabular}{l c c c}
+\hline
+ & \multicolumn{3}{c}{Education} \\
+\cline{2-4}
+ & High & Medium & Low \\
+\hline
+(Intercept)                                     & $0.17^{***}$  & $0.16^{***}$  & $0.21^{***}$ \\
+                                                & $(0.02)$      & $(0.02)$      & $(0.04)$     \\
+Vulnerability                                   &               &               &              \\
+                                                &               &               &              \\
+\quad Moderate (risk of death)                  & $0.07^{***}$  & $0.05^{***}$  & $0.04^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.01)$     \\
+\quad High (risk of death)                      & $0.21^{***}$  & $0.19^{***}$  & $0.16^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+Transmission                                    &               &               &              \\
+                                                &               &               &              \\
+\quad Moderate risk (of transmission)           & $0.04^{***}$  & $0.05^{***}$  & $0.04^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.01)$     \\
+\quad High risk (of transmission)               & $0.17^{***}$  & $0.17^{***}$  & $0.14^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+Income                                          &               &               &              \\
+                                                &               &               &              \\
+\quad Average income level                      & $-0.02^{***}$ & $-0.02^{***}$ & $-0.01$      \\
+                                                & $(0.01)$      & $(0.00)$      & $(0.01)$     \\
+\quad Highest 20\% income level                 & $-0.05^{***}$ & $-0.05^{***}$ & $-0.03$      \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.01)$     \\
+Occupation                                      &               &               &              \\
+                                                &               &               &              \\
+\quad Non-Key worker: Can work at home          & $0.00$        & $-0.01$       & $-0.00$      \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+\quad Non-Key worker: Cannot work at home       & $0.08^{***}$  & $0.09^{***}$  & $0.08^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+\quad Key worker: Education and childcare       & $0.21^{***}$  & $0.21^{***}$  & $0.18^{***}$ \\
+                                                & $(0.01)$      & $(0.02)$      & $(0.02)$     \\
+\quad Key worker: Factory worker                & $0.15^{***}$  & $0.15^{***}$  & $0.11^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+\quad Key worker: Water and electricity service & $0.16^{***}$  & $0.17^{***}$  & $0.13^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+\quad Key worker: Police and fire-fighting      & $0.22^{***}$  & $0.23^{***}$  & $0.20^{***}$ \\
+                                                & $(0.01)$      & $(0.02)$      & $(0.03)$     \\
+\quad Key worker: Health and social care        & $0.27^{***}$  & $0.28^{***}$  & $0.23^{***}$ \\
+                                                & $(0.02)$      & $(0.01)$      & $(0.03)$     \\
+Age Category                                    &               &               &              \\
+                                                &               &               &              \\
+\quad 40 years old                              & $0.05^{***}$  & $0.06^{***}$  & $0.05^{***}$ \\
+                                                & $(0.01)$      & $(0.01)$      & $(0.02)$     \\
+\quad 65 years old                              & $0.09^{***}$  & $0.11^{***}$  & $0.10^{***}$ \\
+                                                & $(0.02)$      & $(0.01)$      & $(0.03)$     \\
+\quad 79 years old                              & $0.08^{***}$  & $0.11^{***}$  & $0.09^{*}$   \\
+                                                & $(0.02)$      & $(0.02)$      & $(0.04)$     \\
+\hline
+Country Fixed Effects?                          & Yes           & Yes           & Yes          \\
+\hline
+\multicolumn{4}{l}{\tiny{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}
+\end{tabular}
+\end{scriptsize}
+\caption{Linear (OLS) Regression Results for Education Categories. The dependent variable is the Forced Choice decision. These are the estimates used to construct the conjoint plots presented in Figure \ref{fig:hetero_ols_cov_edu_gen}.}
+\label{table:education_ols}
+\end{center}
+\end{table}
