@@ -777,17 +777,17 @@ recode_inc <- function(data, ccode) {
                                  data$wtp_access == "Do not know"
                                  ~ "Do not know")
     
-    data$geq_donation <- case_when(grepl("should donate 10%", data$Q18.8)
-                                   ~ "Donate 10%",
-                                   grepl("should not donate any", data$Q18.8)
-                                   ~ "Not donate any",
-                                   grepl("should donate more than", data$Q18.8)
-                                   ~ "Donate more than 10%",
-                                   grepl("donate less than", data$Q18.8)
-                                   ~ "Donate less than 10%",
-                                   data$Q18.8 == "Do not know" ~ "Do not know",
-                                   data$Q18.8 == "Prefer not to say" ~ "Prefer not to say"
-    )
+    # data$geq_donation <- case_when(grepl("should donate 10%", data$geq_donation)
+    #                                ~ "Donate 10%",
+    #                                grepl("should not donate any", data$geq_donation)
+    #                                ~ "Not donate any",
+    #                                grepl("should donate more than", data$geq_donation)
+    #                                ~ "Donate more than 10%",
+    #                                grepl("donate less than", data$geq_donation)
+    #                                ~ "Donate less than 10%",
+    #                                data$geq_donation == "Do not know" ~ "Do not know",
+    #                                data$geq_donation == "Prefer not to say" ~ "Prefer not to say"
+    # )
     
   } else if (ccode == "ita") {
     
@@ -945,17 +945,17 @@ recode_inc <- function(data, ccode) {
                                  data$wtp_access == "Do not know"
                                  ~ "Do not know")
     
-    data$geq_donation <- case_when(grepl("should donate 10%", data$Q18.8)
-                                   ~ "Donate 10%",
-                                   grepl("should not donate any", data$Q18.8)
-                                   ~ "Not donate any",
-                                   grepl("should donate more than", data$Q18.8)
-                                   ~ "Donate more than 10%",
-                                   grepl("donate less than", data$Q18.8)
-                                   ~ "Donate less than 10%",
-                                   data$Q18.8 == "Do not know" ~ "Do not know",
-                                   data$Q18.8 == "Prefer not to say" ~ "Prefer not to say"
-    )
+    # data$geq_donation <- case_when(grepl("should donate 10%", data$Q18.8)
+    #                                ~ "Donate 10%",
+    #                                grepl("should not donate any", data$Q18.8)
+    #                                ~ "Not donate any",
+    #                                grepl("should donate more than", data$Q18.8)
+    #                                ~ "Donate more than 10%",
+    #                                grepl("donate less than", data$Q18.8)
+    #                                ~ "Donate less than 10%",
+    #                                data$Q18.8 == "Do not know" ~ "Do not know",
+    #                                data$Q18.8 == "Prefer not to say" ~ "Prefer not to say"
+    # )
     
   } else if (ccode == "uk") {
     
