@@ -10,13 +10,17 @@ library(ggridges)
 library(ggpubr)
 set.seed(89)
 
+rm(list = ls())
+
 #### 0. Functions ####
 
 source("conjoint_functions.R")
+eval(parse("wtp_functions.R", encoding="UTF-8"))
 
 #### 1. Read-in conjoint data ####
 
 global_data <- read_rds("data/nbh_clean_conjoint_global.rds")
+wtp_data <- read_rds("data/clean_wtp_global.rds")
 
 #### 2. Analysis ####
 
@@ -317,13 +321,69 @@ sumtab_2 <- cbind(
                       hline.after = c(nrow(.)),
                       file = "tables/summary_tab_hes_edu_gen.tex")
 
-#### 5. WTP charts ####
+#### 5. WTP analysis ####
+
+# Willingness to pay table #
+
+WTP_vaccine <- tibble()
+WTP_taxes <- tibble()
+WTP_ticket <- tibble()
+rnames <- c()
+
+for (country_name in c("UK", "Australia", "Brazil", "Canada", "Colombia", "Chile",
+                  "China", "France", "India", "Italy", "Spain", "Uganda", 
+                  "US")) {
+  rnames <- c(rnames, country_name)
+  WTP_vaccine <- rbind(WTP_vaccine, wtp_regression(wtp_data, country_name, PPP = T)$vaccine)
+  WTP_taxes <- rbind(WTP_taxes, wtp_regression(wtp_data, country_name, PPP = T)$taxes)
+  WTP_ticket <- rbind(WTP_ticket, wtp_regression(wtp_data, country_name, PPP = T)$ticket)
+  rownames(WTP_vaccine) <- rnames
+  rownames(WTP_taxes) <- rnames
+  rownames(WTP_ticket) <- rnames
+}
+
+WTP_vaccine <- WTP_vaccine %>% 
+  rownames_to_column() %>%
+  mutate(median = round(median),
+         mean = round(mean)) %>%
+  pivot_longer(-rowname, 'variable', 'value') %>%
+  pivot_wider(variable, rowname)
+
+WTP_taxes <- WTP_taxes %>% 
+  rownames_to_column() %>%
+  mutate(median = round(median),
+         mean = round(mean)) %>%
+  pivot_longer(-rowname, 'variable', 'value') %>%
+  pivot_wider(variable, rowname)
+
+WTP_ticket <- WTP_ticket %>% 
+  rownames_to_column() %>%
+  mutate(median = round(median),
+         mean = round(mean)) %>%
+  pivot_longer(-rowname, 'variable', 'value') %>%
+  pivot_wider(variable, rowname)
+
+stargazer(WTP_vaccine, 
+          summary = FALSE, 
+          out = "tables/WTP_vaccine.tex", 
+          rownames = F, 
+          title = "Willingness to pay for a COVID-19 vaccine (US PPP)")
+
+stargazer(WTP_taxes,
+          summary = FALSE, 
+          out = "tables/WTP_taxes.tex",
+          rownames = F,
+          title = "Willingness to pay extra taxes for a COVID-19 vaccine (US PPP)")
+
+stargazer(WTP_ticket, 
+          summary = FALSE,
+          out = "tables/WTP_ticket.tex",
+          rownames = F,
+          title = "Willingness to pay an extra pet ticket ticket for a COVID-19 vaccine (US PPP)")
 
 # Willingness to pay
 
-global_data %>% 
-  select(id, country, wtp_access) %>% 
-  distinct() %>% 
+wtp_data %>%
   group_by(country, wtp_access) %>% 
   summarise(count = n()) %>% 
   group_by(country) %>% 
@@ -353,10 +413,9 @@ global_data %>%
         text = element_text(size = 24)) +
   ggsave("figures/willingness_to_pay.pdf", width = 13)
 
+
 # Willingness to pay privately
-global_data %>% 
-  select(id, country, wtp_private) %>% 
-  distinct() %>% 
+wtp_data %>%
   group_by(country, wtp_private) %>% 
   summarise(count = n()) %>% 
   group_by(country) %>% 
@@ -364,7 +423,7 @@ global_data %>%
             perc = round(prop*100,0),
             wtp_private = wtp_private) %>% 
   
-ggplot(aes(fill=wtp_private, y=prop, x=country)) + 
+  ggplot(aes(fill=wtp_private, y=prop, x=country)) + 
   geom_bar(position = "fill", stat = "identity", width = .7) +
   geom_text(aes(label = perc), position = position_fill(vjust = 0.5), size = 7) +
   labs(y = "Percentage of Respondents", x = "") +
@@ -377,6 +436,60 @@ ggplot(aes(fill=wtp_private, y=prop, x=country)) +
   theme(legend.position="right",
         text = element_text(size = 24)) +
   ggsave("figures/wtp_private.pdf", width = 13)
+
+# Willingness to pay taxes
+wtp_data %>%
+  group_by(country, geq_taxes_0) %>% 
+  summarise(count = n()) %>% 
+  group_by(country) %>% 
+  summarise(prop = count/sum(count),
+            perc = round(prop*100,0),
+            geq_taxes_0 = geq_taxes_0) %>% 
+  
+  ggplot(aes(fill=geq_taxes_0, y=prop, x=country)) + 
+  geom_bar(position = "fill", stat = "identity", width = .7) +
+  geom_text(aes(label = perc), position = position_fill(vjust = 0.5), size = 7) +
+  labs(y = "Percentage of Respondents", x = "") +
+  scale_y_continuous(labels = scales::percent_format())+
+  coord_flip() +
+  scale_fill_discrete(name="Willing to \npay additional \ntaxes",
+                      breaks=c("DK", "No", "Yes","RF"),
+                      labels=c("Do not know", "No", "Yes","Prefer not to say")) + 
+  theme_pubr() +
+  theme(legend.position="right",
+        text = element_text(size = 24)) +
+  ggsave("figures/geq_taxes_0.pdf", width = 13)
+
+# Willingness to pay extra ticket
+wtp_data %>%
+  group_by(country, geq_ticket_0) %>% 
+  summarise(count = n()) %>% 
+  group_by(country) %>% 
+  summarise(prop = count/sum(count),
+            perc = round(prop*100,0),
+            geq_ticket_0 = geq_ticket_0) %>% 
+  
+  ggplot(aes(fill=geq_ticket_0, y=prop, x=country)) + 
+  geom_bar(position = "fill", stat = "identity", width = .7) +
+  geom_text(aes(label = perc), position = position_fill(vjust = 0.5), size = 7) +
+  labs(y = "Percentage of Respondents", x = "") +
+  scale_y_continuous(labels = scales::percent_format())+
+  coord_flip() +
+  scale_fill_discrete(name="Willing to \npay an additional \ntax on airline tickets",
+                      breaks=c("DK", "No", "Yes","RF"),
+                      labels=c("Do not know", "No", "Yes","Prefer not to say")) + 
+  theme_pubr() +
+  theme(legend.position="right",
+        text = element_text(size = 24)) +
+  ggsave("figures/geq_ticket_0.pdf", width = 13)
+
+# Willingness to pay functions
+
+for (country in c("UK", "Australia", "Brazil", "Canada", "Colombia", "Chile",
+                  "China", "France", "India", "Italy", "Spain", "Uganda", 
+                  "US")) {
+  wtp_figures(wtp_data, country)
+}
 
 # Government mandated vaccine
 
